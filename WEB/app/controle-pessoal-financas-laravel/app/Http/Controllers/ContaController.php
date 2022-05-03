@@ -23,9 +23,9 @@ class ContaController extends Controller
 
                 $listaContas = Cria::arrayContas($dados);
 
-                $nomesCompletos = $this->geraListaContasCompleto($dados);
+                $arrayNomesCompletos = $this->geraListaContasCompleto($dados);
 
-                $request->session()->put('contas', $nomesCompletos);
+                $request->session()->put('contas', $arrayNomesCompletos);
 
                 return view(
                     'Conta.conta',
@@ -222,7 +222,7 @@ class ContaController extends Controller
         foreach ($contas as $conta) {
             if (empty($conta['conta_pai'])) {
                 $nomeCompleto = $conta['nome'];
-                $lista[$conta['nome']] = $conta['nome'];
+                $lista[$nomeCompleto] = $nomeCompleto;
             } else {
                 $nomeCompleto = $conta['conta_pai'] . '>' . $conta['nome'];
 
