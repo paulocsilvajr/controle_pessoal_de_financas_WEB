@@ -52,12 +52,18 @@ class ContaController extends Controller
                 }
 
                 $dados = $resposta['data'];
+                $lancamentos = array();
+                foreach ($dados as $dado) {
+                    $lanc = new Lancamento($dado);
+                    $lancamentos[] = $lanc;
+                }
 
                 return view(
                     'Conta.contaEspecifica',
                     compact(
                         'nomeConta',
                         'dados',
+                        'lancamentos'
                     )
                 );
             }

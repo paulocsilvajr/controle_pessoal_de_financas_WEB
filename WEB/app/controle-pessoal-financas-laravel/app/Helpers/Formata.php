@@ -28,6 +28,14 @@ final class Formata
         return sprintf('%02d/%02d/%04d', $dia, $mes, $ano);
     }
 
+    /**
+     * textoParaDataBrasilDT formata a data no formato Datetime para o formato brasileiro DD/MM/YYYY
+     */
+    public static function textoParaDataBrasilDT(datetime $data): string
+    {
+        return $data->format('d/m/Y');
+    }
+
     public static function textoParaDatetime(string $data): DateTime
     {
         $data = substr($data, 0, 19);

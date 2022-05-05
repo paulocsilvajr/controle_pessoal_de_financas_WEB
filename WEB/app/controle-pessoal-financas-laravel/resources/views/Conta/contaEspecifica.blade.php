@@ -18,7 +18,7 @@
             </div>
         </div>
 
-        @if($dados == null)
+        @if($lancamentos == null)
             @php
                 $mensagem = 'Sem lançamentos para a conta \'' . ucfirst($nomeConta) . '\'';
             @endphp
@@ -40,21 +40,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($dados as $dado)
+
+                        @foreach ($lancamentos as $lancamento)
                             <tr>
-                                <th scope="row" class="align-middle">{{ $dado['id'] }}</th>
-                                <td class="align-middle">{{ App\Helpers\Formata::textoParaDataBrasil($dado['data']) }}</td>
-                                <td class="align-middle">{{ $dado['numero'] }}</td>
-                                <td class="align-middle"><strong>{{ $dado['descricao'] }}</strong></td>
-                                @if ($dado['nome_conta_origem'] == $nomeConta)
-                                    <td class="align-middle">{{ ucfirst($dado['nome_conta_destino']) }}</td>
+                                <th scope="row" class="align-middle">{{ $lancamento->id }}</th>
+                                <td class="align-middle">{{ App\Helpers\Formata::textoParaDataBrasilDT($lancamento->data) }}</td>
+                                <td class="align-middle">{{ $lancamento->numero }}</td>
+                                <td class="align-middle"><strong>{{ $lancamento->descricao }}</strong></td>
+                                @if ($lancamento->nomeContaOrigem == $nomeConta)
+                                    <td class="align-middle">{{ ucfirst($lancamento->nomeContaDestino) }}</td>
                                 @else
-                                    <td class="align-middle">{{ ucfirst($dado['nome_conta_origem']) }}</td>
+                                    <td class="align-middle">{{ ucfirst($lancamento->nomeContaOrigem) }}</td>
                                 @endif
-                                <td class="alinhamento-numeros-tabela align-middle">{{ App\Helpers\Formata::valorParaMonetarioBrasil($dado['debito']) }}</td>
-                                <td class="alinhamento-numeros-tabela align-middle">{{ App\Helpers\Formata::valorParaMonetarioBrasil($dado['credito']) }}</td>
+                                <td class="alinhamento-numeros-tabela align-middle">{{ App\Helpers\Formata::valorParaMonetarioBrasil($lancamento->debito) }}</td>
+                                <td class="alinhamento-numeros-tabela align-middle">{{ App\Helpers\Formata::valorParaMonetarioBrasil($lancamento->credito) }}</td>
                                 <td class="text-center">
-                                    <a href="/lancamentos/{{ $dado['id'] }}" class="btn btn-primary">Detalhes</a>
+                                    <a href="/lancamentos/{{ $lancamento->id }}" class="btn btn-primary">Detalhes</a>
                                     <input name="" id="" class="btn btn-danger" type="button" value="Remover">
                                 </td>
                             </tr>
