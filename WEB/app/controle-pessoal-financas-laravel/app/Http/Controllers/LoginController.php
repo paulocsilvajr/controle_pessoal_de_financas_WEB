@@ -8,7 +8,7 @@ use App\Services\RequisicaoHttp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class EntrarController extends Controller
+class LoginController extends Controller
 {
     public function index(Request $request)
     {

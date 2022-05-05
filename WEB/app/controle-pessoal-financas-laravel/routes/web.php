@@ -17,9 +17,9 @@ Route::get('/laravel', function () {
     return view('welcome');
 });
 
-Route::get('/login', 'EntrarController@index')->name('login');
-Route::post('/login', 'EntrarController@entrar');
-Route::get('/logout', 'EntrarController@sair')->name('logout');
+Route::get('/login', 'LoginController@index')->name('login');
+Route::post('/login', 'LoginController@entrar');
+Route::get('/logout', 'LoginController@sair')->name('logout');
 
 Route::get('/', 'PrincipalController@index')
     ->middleware('autenticador');
