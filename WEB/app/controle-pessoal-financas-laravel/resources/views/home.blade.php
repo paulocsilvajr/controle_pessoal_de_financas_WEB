@@ -33,17 +33,7 @@
             </div>
         @endif
 
-        <div class="row">
-            <div class="col">
-                <div id="app">
-                    <exemplo></exemplo>
-                </div>
-            </div>
-        </div>
     </div>
 
 @endsection
 
-@section('script')
-    <script src="{{ asset('js/app.js') }}"></script>
-@endsection

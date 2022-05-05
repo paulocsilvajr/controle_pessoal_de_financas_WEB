@@ -23,6 +23,11 @@ body {
     font-weight: bold;
 }
 
+.dev {
+    margin-top: 2em;
+    text-align: center;
+}
+
 /* ALTURA de screen <= 480px */
 @media screen and (max-height: 480px) {
     .formulario-login {

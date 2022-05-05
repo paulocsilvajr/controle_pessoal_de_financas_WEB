@@ -23,12 +23,10 @@
         </button>
     </form>
 
-    <div id="app">
-        <desenvolvedor></desenvolvedor>
-    </div>
+    <p class="dev">
+        Desenvolvido por <a href="https://github.com/paulocsilvajr">
+        Paulo C. Silva Jr
+        <i class="fab fa-github" aria-hidden="true"></i></a>
+    </p>
 
-@endsection
-
-@section('script')
-    <script src="{{ asset('js/app.js') }}"></script>
 @endsection
