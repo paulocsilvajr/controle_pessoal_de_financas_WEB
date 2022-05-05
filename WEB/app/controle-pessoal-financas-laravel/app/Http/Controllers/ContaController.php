@@ -15,135 +15,119 @@ class ContaController extends Controller
 {
     public function index(Request $request, RequisicaoHttp $http, Token $token)
     {
-        if ($token->valido()) {
-            $resposta = $http->get('/contas');
+        $resposta = $http->get('/contas');
 
-            if ($resposta->successful()) {
-                $dados = $resposta['data'];
+        if ($resposta->successful()) {
+            $dados = $resposta['data'];
 
-                $listaContas = Cria::arrayContas($dados);
+            $listaContas = Cria::arrayContas($dados);
 
-                $arrayNomesCompletos = $this->geraListaContasCompleto($dados);
+            $arrayNomesCompletos = $this->geraListaContasCompleto($dados);
 
-                $request->session()->put('contas', $arrayNomesCompletos);
+            $request->session()->put('contas', $arrayNomesCompletos);
 
-                return view(
-                    'Conta.conta',
-                    compact(
-                        'listaContas',
-                    )
-                );
-            }
-
-            return redirect()->route('home');
-        } else {
-            return redirect()->route('login');
+            return view(
+                'Conta.conta',
+                compact(
+                    'listaContas',
+                )
+            );
         }
+
+        return redirect()->route('home');
     }
 
     public function contaEspecifica(Request $request, RequisicaoHttp $http, Token $token, string $nomeConta)
     {
-        if ($token->valido()) {
-            $resposta = $http->get("/lancamentos_conta/$nomeConta");
+        $resposta = $http->get("/lancamentos_conta/$nomeConta");
 
-            if ($resposta->successful()) {
-                if ($resposta['count'] == 0) {
-                    LogPersonalizado::info("Sem registro de Lançamentos para a conta '$nomeConta'");
-                }
-
-                $dados = $resposta['data'];
-                $lancamentos = array();
-                foreach ($dados as $dado) {
-                    $lanc = new Lancamento($dado);
-                    $lancamentos[] = $lanc;
-                }
-
-                return view(
-                    'Conta.contaEspecifica',
-                    compact(
-                        'nomeConta',
-                        'dados',
-                        'lancamentos'
-                    )
-                );
+        if ($resposta->successful()) {
+            if ($resposta['count'] == 0) {
+                LogPersonalizado::info("Sem registro de Lançamentos para a conta '$nomeConta'");
             }
 
-            return redirect()->route('home');
-        } else {
-            return redirect()->route('login');
+            $dados = $resposta['data'];
+            $lancamentos = array();
+            foreach ($dados as $dado) {
+                $lanc = new Lancamento($dado);
+                $lancamentos[] = $lanc;
+            }
+
+            return view(
+                'Conta.contaEspecifica',
+                compact(
+                    'nomeConta',
+                    'dados',
+                    'lancamentos'
+                )
+            );
         }
+
+        return redirect()->route('home');
     }
 
     public function carregaCadastroLancamento(Request $request, RequisicaoHttp $http, Token $token, string $nomeConta) {
-        if ($token->valido()) {
-            $mensagem = '';
-            $tipoMensagem = '';
+        $mensagem = '';
+        $tipoMensagem = '';
 
-            $usuario = $request->session()->get('usuario');
-            $resposta = $http->get("/pessoas/$usuario");
+        $usuario = $request->session()->get('usuario');
+        $resposta = $http->get("/pessoas/$usuario");
 
-            if ($resposta->successful()) {
-                $cpf = $resposta['data']['cpf'];
+        if ($resposta->successful()) {
+            $cpf = $resposta['data']['cpf'];
 
-                $contas = $request->session()->get('contas');
-                $contas = $this->filtraContas($contas, $nomeConta);
-                array_multisort($contas);  // ordenação de array associativo pelos valores(nome completo da conta com separador >)
+            $contas = $request->session()->get('contas');
+            $contas = $this->filtraContas($contas, $nomeConta);
+            array_multisort($contas);  // ordenação de array associativo pelos valores(nome completo da conta com separador >)
 
-                $destino = '';
-                $tipo = 'debito';
+            $destino = '';
+            $tipo = 'debito';
 
-                return view(
-                    'Conta.cadastroLancamento',
-                    compact(
-                        'nomeConta',
-                        'mensagem',
-                        'tipoMensagem',
-                        'cpf',
-                        'contas',
-                        'destino',
-                        'tipo'
-                    )
-                );
-            }
-            return redirect()->route('home');
-        } else {
-            return redirect()->route('login');
+            return view(
+                'Conta.cadastroLancamento',
+                compact(
+                    'nomeConta',
+                    'mensagem',
+                    'tipoMensagem',
+                    'cpf',
+                    'contas',
+                    'destino',
+                    'tipo'
+                )
+            );
         }
+        return redirect()->route('home');
     }
 
     public function carregaLancamento(Request $request, RequisicaoHttp $http, Token $token, int $idLancamento) {
-        if ($token->valido()) {
-            $mensagem = '';
-            $tipoMensagem = '';
+        $mensagem = '';
+        $tipoMensagem = '';
 
-            $resposta = $http->get("/lancamentos/$idLancamento");
+        $resposta = $http->get("/lancamentos/$idLancamento");
 
-            if ($resposta->successful()) {
-                $dados = $resposta['data'];
+        if ($resposta->successful()) {
+            $dados = $resposta['data'];
 
-                // dd($dados);
-                $lanc = new Lancamento($dados);
-                // dd($lanc);
-                dd($lanc->toJson());
+            // dd($dados);
+            $lanc = new Lancamento($dados);
+            // dd($lanc);
+            dd($lanc->toJson());
 
-                // $id = $dados['id'];
-                // $nomeConta = $dados['']
+            // $id = $dados['id'];
+            // $nomeConta = $dados['']
 
-                // $contas = $request->session()->get('contas');
-                // $contas = $this->filtraContas($contas, $nomeConta);
-                // array_multisort($contas);
+            // $contas = $request->session()->get('contas');
+            // $contas = $this->filtraContas($contas, $nomeConta);
+            // array_multisort($contas);
 
-                return view(
-                    'Conta.cadastroLancamento',
-                    compact(
-                        'id'
-                    )
-                );
-            }
-            return redirect()->back();
-        } else {
-            return redirect()->route('login');
+            return view(
+                'Conta.cadastroLancamento',
+                compact(
+                    'id'
+                )
+            );
         }
+        return redirect()->back();
     }
 
     public function cadastraLancamento(Request $request, RequisicaoHttp $http, Token $token) {
