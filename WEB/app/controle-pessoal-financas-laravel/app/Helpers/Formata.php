@@ -47,6 +47,15 @@ final class Formata
         return $dataConvertida;
     }
 
+    public static function textoParaDatetimeForm(string $data): DateTime
+    {
+        $dataConvertida = DateTime::createFromFormat('Y-m-d', $data);
+        if (!$dataConvertida) {
+            throw new UnexpectedValueException("Não foi possível converter a data informada[$data]");
+        }
+        return $dataConvertida;
+    }
+
     public static function DatetimeParaJSON(Datetime $data): string {
         return $data->format('Y-m-d\TH:i:s.000\Z');
     }
