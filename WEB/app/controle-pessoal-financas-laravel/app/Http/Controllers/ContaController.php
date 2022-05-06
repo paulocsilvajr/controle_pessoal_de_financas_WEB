@@ -47,7 +47,11 @@ class ContaController extends Controller
             }
 
             $dados = $resposta['data'];
-            $lancamentos = Cria::arrayLancamentos($dados);
+            if (is_null($dados)) {
+                $lancamentos = null;
+            } else {
+                $lancamentos = Cria::arrayLancamentos($dados);
+            }
 
             return view(
                 'Conta.contaEspecifica',
