@@ -117,7 +117,7 @@ class LancamentoController extends Controller
             $tipoMensagem = 'success';
 
             return redirect()->route(
-                'contaEspecifica',
+                'contaCadastroLancamento',
                 [
                     'nomeConta' => $nome_conta_origem,
                     'mensagem' => $mensagem,
