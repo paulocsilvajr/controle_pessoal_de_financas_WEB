@@ -79,47 +79,22 @@ class LancamentoController extends Controller
     }
 
     public function cadastraLancamento(Request $request, RequisicaoHttp $http, Token $token) {
-        $cpf = $request->cpf_pessoa;
-        $nome_conta_origem = $request->nome_conta_origem;
-        $data = $request->data;
-        $numero = $request->numero;
-        $descricao = $request->descricao;
-        $nome_conta_destino = $request->nome_conta_destino;
-        $valor = $request->valor;
-        $tipo = $request->tipo;
-
-        $dataFormatada = $this->formataData($data);
-
-        $debito = 0.0;
-        $credito = 0.0;
-        if ($tipo == 'debito') {
-            $debito = floatval($valor);
-        } else {
-            $credito = floatval($valor);
-        }
+        $lancamento = new Lancamento();
+        $lancamento->fromForm($request);
 
         $resposta = $http->post(
             "/lancamentos",
-            [
-                'cpf_pessoa' => $cpf,
-                'nome_conta_origem' => $nome_conta_origem,
-                'data' => $dataFormatada,
-                'numero' => $numero,
-                'descricao' => $descricao,
-                'nome_conta_destino' => $nome_conta_destino,
-                'debito' => $debito,
-                'credito' => $credito
-            ]
+            $lancamento->toJSONPost()
         );
 
         if ($resposta->successful()) {
-            $mensagem = "Lançamento '$descricao' cadastrado com sucesso";
+            $mensagem = "Lançamento '$lancamento->descricao' cadastrado com sucesso";
             $tipoMensagem = 'success';
 
             return redirect()->route(
                 'contaCadastroLancamento',
                 [
-                    'nomeConta' => $nome_conta_origem,
+                    'nomeConta' => $lancamento->nomeContaOrigem,
                     'mensagem' => $mensagem,
                     'tipoMensagem' => $tipoMensagem
                 ]
@@ -129,11 +104,18 @@ class LancamentoController extends Controller
         $mensagem = "$resposta";
         $tipoMensagem = 'danger';
 
-        $nomeConta = $nome_conta_origem;
+        $nomeConta = $lancamento->nomeContaOrigem;
         $contas = $request->session()->get('contas');
         $contas = $this->filtraContas($contas, $nomeConta);
 
-        $destino =  $nome_conta_destino;
+        $destino =  $lancamento->nomeContaDestino;
+
+        $cpf = $lancamento->cpf;
+        $data = $lancamento->dataCriacao;
+        $numero = $lancamento->numero;
+        $descricao = $lancamento->descricao;
+        $valor = $request->valor;
+        $tipo = $request->tipo;
 
         return view(
             'Conta.cadastroLancamento',
@@ -141,7 +123,6 @@ class LancamentoController extends Controller
                 'nomeConta',
                 'mensagem',
                 'tipoMensagem',
-                'cpf',
                 'contas',
                 'cpf',
                 'data',

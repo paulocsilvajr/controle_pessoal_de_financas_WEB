@@ -20,9 +20,11 @@ class Lancamento {
     public Datetime $dataModificacao;
     public bool $estado;
 
-    public function __construct($dados)
+    public function __construct($dados = null)
     {
-        $this->fromJSON($dados);
+        if (!is_null($dados)) {
+            $this->fromJSON($dados);
+        }
     }
 
     public function fromJSON($dados) {
@@ -40,17 +42,46 @@ class Lancamento {
         $this->estado = $dados['estado'];
     }
 
-    public function toJSON(): string {
-        $json = array(
+    public function toJSONPost(): array {
+        return array(
             "cpf_pessoa" => $this->cpfPessoa,
             "nome_conta_origem" => $this->nomeContaOrigem,
-            "data" => Formata::DatetimeParaJson($this->data),
+            "data" => Formata::DatetimeParaJson($this->dataCriacao),
             "numero" => $this->numero,
             "descricao" => $this->descricao,
             "nome_conta_destino" => $this->nomeContaDestino,
             "debito" => $this->debito,
             "credito" => $this->credito
         );
+    }
+
+    public function toJSON(): string {
+        $json = $this->toJSONPost();
         return json_encode($json);
+    }
+
+    public function fromForm($request) {
+        $this->cpfPessoa = $request->cpf_pessoa;
+        $this->nomeContaOrigem = $request->nome_conta_origem;
+        $data = $request->data;
+        $this->numero = $request->numero;
+        $this->descricao = $request->descricao;
+        $this->nomeContaDestino = $request->nome_conta_destino;
+        $valor = $request->valor;
+        $tipo = $request->tipo;
+
+        $this->dataCriacao = Formata::textoParaDatetimeForm($data);
+
+        $this->debito = 0.0;
+        $this->credito = 0.0;
+        if ($tipo == 'debito') {
+            $this->debito = floatval($valor);
+        } else {
+            $this->credito = floatval($valor);
+        }
+    }
+
+    private function formataData(string $data): string {
+        return "${data}T00:00:00Z";
     }
 }
