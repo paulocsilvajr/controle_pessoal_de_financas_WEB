@@ -33,15 +33,16 @@ Route::get('/api', 'RotasApiController@index')
 Route::get('/conta', 'ContaController@index')->name('conta')
     ->middleware('autenticador')
     ->middleware('token');
-Route::get('/conta/{nomeConta}', 'ContaController@contaEspecifica')->name('contaEspecifica')
+Route::get('/conta/{nomeConta}', 'ContaController@listaLancamentosConta')->name('listaLancamentosConta')
     ->middleware('autenticador')
     ->middleware('token');
-Route::get('/conta/{nomeConta}/cadastroLancamento', 'ContaController@carregaCadastroLancamento')->name('contaCadastroLancamento')
+
+Route::get('/conta/{nomeConta}/cadastroLancamento', 'LancamentoController@carregaCadastroLancamento')->name('contaCadastroLancamento')
     ->middleware('autenticador')
     ->middleware('token');
-Route::post('/conta/{nomeConta}/cadastroLancamento', 'ContaController@cadastraLancamento')
+Route::post('/conta/{nomeConta}/cadastroLancamento', 'LancamentoController@cadastraLancamento')
     ->middleware('autenticador');
 
-Route::get('/lancamentos/{idLancamento}', 'ContaController@carregaLancamento')
+Route::get('/lancamentos/{idLancamento}', 'LancamentoController@carregaLancamento')
     ->middleware('autenticador')
     ->middleware('token');
