@@ -20,16 +20,16 @@ class ContaController extends Controller
         if ($resposta->successful()) {
             $dados = $resposta['data'];
 
-            $listaContas = Cria::arrayContas($dados);
+            $arrayContas = Cria::arrayContas($dados);
 
-            $arrayNomesCompletos = $this->geraListaContasCompleto($dados);
+            $arrayNomesCompletos = $this->geraArrayContasCompleto($dados);
 
             $request->session()->put('contas', $arrayNomesCompletos);
 
             return view(
                 'Conta.conta',
                 compact(
-                    'listaContas',
+                    'arrayContas',
                 )
             );
         }
@@ -62,7 +62,7 @@ class ContaController extends Controller
         return redirect()->route('home');
     }
 
-    private function geraListaContasCompleto(array $contas): array{
+    private function geraArrayContasCompleto(array $contas): array{
         $lista = array();
 
         foreach ($contas as $conta) {

@@ -29,14 +29,14 @@
 
         {{-- impressão de contas recursiva --}}
         <ul class="nav flex-column mt-3">
-            @if (is_array($listaContas))
-                @foreach ($listaContas as $conta)
+            @if (is_array($arrayContas))
+                @foreach ($arrayContas as $conta)
                     @if (empty($conta->contaPai))
                         <li class="nav-item">
                         <a href="/conta/{{ $conta->nome }}" class="nav-link"><strong>{{ ucfirst($conta->nome) }}</strong></a>
                             <?php
                                 $texto = '';
-                                imprime($listaContas, $conta->nome, $texto);
+                                imprime($arrayContas, $conta->nome, $texto);
                                 echo $texto;
                             ?>
                         </li>
