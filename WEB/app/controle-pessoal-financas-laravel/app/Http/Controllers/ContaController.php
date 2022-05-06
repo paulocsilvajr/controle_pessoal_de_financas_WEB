@@ -47,11 +47,7 @@ class ContaController extends Controller
             }
 
             $dados = $resposta['data'];
-            $lancamentos = array();
-            foreach ($dados as $dado) {
-                $lanc = new Lancamento($dado);
-                $lancamentos[] = $lanc;
-            }
+            $lancamentos = Cria::arrayLancamentos($dados);
 
             return view(
                 'Conta.contaEspecifica',
