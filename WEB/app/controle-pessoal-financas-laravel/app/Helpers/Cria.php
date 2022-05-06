@@ -19,10 +19,10 @@ final class Cria
 
     private static function arrayTipado($dados, $construtor): array
     {
-        $lista = array();
+        $array = array();
         foreach ($dados as $dado) {
-            $lista[] = new $construtor($dado);
+            $array[] = new $construtor($dado);
         }
-        return $lista;
+        return $array;
     }
 }
