@@ -82,9 +82,9 @@
                     </button>
                 </div>
                 <div class="col-sm mb-2">
-                    <button class="btn btn-secondary btn-block" id="botao-voltar" onclick="history.back()">
+                    <a class="btn btn-secondary btn-block" id="botao-voltar" href="/conta/{{ $nomeConta }}">
                         Voltar
-                    </button>
+                    </a>
                 </div>
             </div>
 
